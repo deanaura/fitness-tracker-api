@@ -13,6 +13,5 @@ connectDB();
 // rute
 app.use('/api/auth', authRoutes);
 app.use('/api', workoutRoutes);
-app.use('/api', goalRoutes);
 
 module.exports = app;

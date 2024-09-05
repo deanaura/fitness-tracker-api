@@ -1,4 +1,5 @@
 const express = require('express');
+const authRoutes = require('./src/routes/authRoutes');
 const workoutRoutes = require('./src/routes/workoutRoutes');
 const connectDB = require('./config');
 const app = express();
@@ -10,6 +11,8 @@ app.use(express.json());
 connectDB();
 
 // rute
+app.use('/api/auth', authRoutes);
 app.use('/api', workoutRoutes);
+app.use('/api', goalRoutes);
 
 module.exports = app;

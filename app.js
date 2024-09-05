@@ -11,7 +11,7 @@ app.use(express.json());
 connectDB();
 
 // rute
-app.use('/api/auth', authRoutes);
+app.use('/api', authRoutes);
 app.use('/api', workoutRoutes);
 
 module.exports = app;

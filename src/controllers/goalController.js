@@ -2,7 +2,7 @@ const Goal = require('../models/goalModel');
 const { handleError } = require('../utils/errorHandler');
 
 class GoalController {
-  // Menambahkan goal baru
+  // menambahkan goal baru
   async addGoal(req, res) {
     try {
       const { goalName, target } = req.body;
@@ -18,7 +18,7 @@ class GoalController {
     }
   }
 
-  // Mendapatkan semua goal user
+  // mendapatkan semua goal user
   async getGoals(req, res) {
     try {
       const goals = await Goal.find({ userId: req.user.id });
@@ -28,7 +28,7 @@ class GoalController {
     }
   }
 
-  // Memperbarui progress goal
+  // memperbarui progress goal
   async updateGoal(req, res) {
     try {
       const { progress } = req.body;
@@ -40,7 +40,7 @@ class GoalController {
         return res.status(404).json({ message: 'Goal not found' });
       }
 
-      // Update progress dan simpan
+      // update progress dan simpan
       goal.progress = progress;
       const updatedGoal = await goal.save();
 
@@ -50,7 +50,7 @@ class GoalController {
     }
   }
 
-  // Menghapus goal
+  // menghapus goal
   async deleteGoal(req, res) {
     try {
       const { id } = req.params;

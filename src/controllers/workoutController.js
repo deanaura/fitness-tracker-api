@@ -6,7 +6,12 @@ class WorkoutController {
   async createWorkout(req, res) {
     try {
       const { exercise, duration, caloriesBurned } = req.body;
-      const newWorkout = new Workout({ exercise, duration, caloriesBurned });
+      const newWorkout = new Workout({
+        exercise,
+        duration,
+        caloriesBurned,
+        userId: req.user.id  
+      });
       const savedWorkout = await newWorkout.save();
       res.status(201).json(savedWorkout);
     } catch (error) {
@@ -17,7 +22,7 @@ class WorkoutController {
   // lihat riwayat latihan
   async getWorkouts(req, res) {
     try {
-      const workouts = await Workout.find();
+      const workouts = await Workout.find({ userId: req.user.id }); 
       res.status(200).json(workouts);
     } catch (error) {
       handleError(res, error);
@@ -28,23 +33,23 @@ class WorkoutController {
   async getStats(req, res) {
     try {
       const { start, end } = req.query;
-  
       const endDate = end ? new Date(end) : new Date();
-  
+
       if (!start) {
         return res.status(400).json({ message: 'Start date is required' });
       }
-  
+
       const workouts = await Workout.find({
+        userId: req.user.id, 
         date: {
           $gte: new Date(start),
           $lte: endDate
         }
       });
-  
+
       const totalDuration = workouts.reduce((acc, workout) => acc + workout.duration, 0);
       const totalCalories = workouts.reduce((acc, workout) => acc + workout.caloriesBurned, 0);
-  
+
       res.status(200).json({
         totalDuration,
         totalCalories
@@ -58,7 +63,7 @@ class WorkoutController {
   async deleteWorkout(req, res) {
     try {
       const { id } = req.params;
-      const deletedWorkout = await Workout.findByIdAndDelete(id);
+      const deletedWorkout = await Workout.findOneAndDelete({ _id: id, userId: req.user.id }); 
       if (!deletedWorkout) return res.status(404).json({ message: 'Workout not found' });
       res.status(200).json({ message: 'Workout deleted' });
     } catch (error) {
